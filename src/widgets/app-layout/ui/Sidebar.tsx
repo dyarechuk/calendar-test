@@ -27,17 +27,17 @@ const menuItems = [
 
 export function Sidebar() {
   return (
-    <aside className="w-65 bg-[#43425D] text-white">
-      <div className="flex h-16 items-center px-8 text-[13px] font-bold tracking-[8px]">
+    <aside className="w-full shrink-0 bg-[#43425D] text-white lg:w-65">
+      <div className="flex h-14 items-center px-4 text-[13px] font-bold tracking-[8px] lg:h-16 lg:px-8">
         IMPEKABLE
       </div>
 
-      <nav className="mt-4">
+      <nav className="flex overflow-x-auto lg:mt-4 lg:block lg:overflow-visible">
         {menuItems.map(({ label, icon: Icon, active }) => (
           <div
             key={label}
             className={clsx(
-              "flex h-14 items-center gap-4 px-8 text-sm text-white/75",
+              "flex h-12 shrink-0 items-center gap-3 px-4 text-sm text-white/75 lg:h-14 lg:gap-4 lg:px-8",
               active && "bg-sidebarActive text-white",
             )}
           >
