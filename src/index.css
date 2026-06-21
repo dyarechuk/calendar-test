@@ -196,14 +196,21 @@ body {
   line-height: 26px;
 }
 
-.rbc-time-header,
-.rbc-overflowing {
-  margin-right: 0 !important;
+.rbc-time-header .rbc-allday-cell:not(:has(.rbc-event, .rbc-show-more)) {
+  display: none;
 }
 
 .rbc-time-header-content {
   min-width: 0;
   border-left: 1px solid var(--color-border) !important;
+}
+
+.rbc-time-header-gutter {
+  display: block !important;
+  flex: none;
+  align-self: stretch;
+  border-bottom: 1px solid var(--color-border) !important;
+  background: var(--color-background-secondary);
 }
 
 .rbc-time-header .rbc-row {
@@ -361,10 +368,6 @@ body {
 
 .rbc-time-view .rbc-today {
   background: var(--color-background-secondary) !important;
-}
-
-.rbc-time-header-gutter {
-  display: none !important;
 }
 
 @media (max-width: 767px) {
