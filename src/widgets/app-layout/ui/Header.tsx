@@ -1,9 +1,28 @@
-import { FiBell, FiGlobe, FiMessageCircle, FiSearch } from "react-icons/fi";
+import {
+  FiBell,
+  FiGlobe,
+  FiMenu,
+  FiMessageCircle,
+  FiSearch,
+} from "react-icons/fi";
 
-export function Header() {
+type HeaderProps = {
+  onMenuClick: () => void;
+};
+
+const Header = ({ onMenuClick }: HeaderProps) => {
   return (
     <header className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:flex-nowrap sm:px-6 sm:py-0">
       <div className="flex min-w-0 flex-1 items-center gap-3 text-slate-400">
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="grid h-9 w-9 place-items-center rounded border border-slate-200 bg-white text-slate-500 lg:hidden"
+          aria-label="Open navigation"
+        >
+          <FiMenu size={18} />
+        </button>
+
         <FiSearch size={18} />
         <span className="hidden truncate text-xs sm:inline">
           Search transactions, invoices or help
@@ -28,4 +47,6 @@ export function Header() {
       </div>
     </header>
   );
-}
+};
+
+export { Header };

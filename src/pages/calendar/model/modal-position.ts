@@ -21,16 +21,19 @@ export const getSlotModalPosition = (
 
   const hasEnoughSpaceBelow =
     clientY + MODAL_OFFSET + MODAL_HEIGHT <= window.innerHeight;
+  const hasEnoughSpaceAbove =
+    clientY - MODAL_OFFSET - MODAL_HEIGHT >= MODAL_OFFSET;
+  const placement =
+    !hasEnoughSpaceBelow && hasEnoughSpaceAbove ? "top" : "bottom";
 
-  const top = hasEnoughSpaceBelow
-    ? clientY + MODAL_OFFSET
-    : clientY - MODAL_HEIGHT - MODAL_OFFSET;
+  const top =
+    placement === "bottom" ? clientY + MODAL_OFFSET : clientY - MODAL_OFFSET;
 
   return {
     top: Math.max(MODAL_OFFSET, top),
     left,
     arrowLeft: clientX - left,
-    placement: hasEnoughSpaceBelow ? "bottom" : "top",
+    placement,
   };
 };
 
@@ -45,15 +48,20 @@ export const getEventModalPosition = (rect: DOMRect): ModalPosition => {
 
   const hasEnoughSpaceBelow =
     rect.bottom + MODAL_OFFSET + MODAL_HEIGHT <= window.innerHeight;
+  const hasEnoughSpaceAbove =
+    rect.top - MODAL_OFFSET - MODAL_HEIGHT >= MODAL_OFFSET;
+  const placement =
+    !hasEnoughSpaceBelow && hasEnoughSpaceAbove ? "top" : "bottom";
 
-  const top = hasEnoughSpaceBelow
-    ? rect.bottom + MODAL_OFFSET
-    : rect.top - MODAL_HEIGHT - MODAL_OFFSET;
+  const top =
+    placement === "bottom"
+      ? rect.bottom + MODAL_OFFSET
+      : rect.top - MODAL_OFFSET;
 
   return {
     top: Math.max(MODAL_OFFSET, top),
     left,
     arrowLeft: eventCenterX - left,
-    placement: hasEnoughSpaceBelow ? "bottom" : "top",
+    placement,
   };
 };

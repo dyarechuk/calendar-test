@@ -17,16 +17,22 @@ type ModalProps = PropsWithChildren<{
   onClose: () => void;
 }>;
 
-export function Modal({ children, position, onClose }: ModalProps) {
-  const style: CSSProperties = position
+type ModalStyle = CSSProperties & {
+  "--modal-placement-transform": string;
+};
+
+const Modal = ({ children, position, onClose }: ModalProps) => {
+  const style: ModalStyle = position
     ? {
         top: position.top,
         left: position.left,
+        "--modal-placement-transform":
+          position.placement === "top" ? "translateY(-100%)" : "translateY(0)",
       }
     : {
         top: "50%",
         left: "50%",
-        transform: "translate(-50%, -50%)",
+        "--modal-placement-transform": "translate(-50%, -50%)",
       };
 
   const handleBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -45,29 +51,33 @@ export function Modal({ children, position, onClose }: ModalProps) {
     >
       <div
         style={style}
-        className="fixed w-65 rounded-md border border-[#43425D] bg-white p-6 shadow-xl"
+        className="event-modal-panel fixed w-65 rounded-[10px] border border-[#43425D] bg-white p-6 shadow-xl"
         onClick={handleModalClick}
       >
-        <div
-          className={
-            position?.placement === "top"
-              ? "absolute -bottom-2 h-4 w-4 rotate-45 border-b border-r border-[#43425D] bg-white"
-              : "absolute -top-2 h-4 w-4 rotate-45 border-l border-t border-[#43425D] bg-white"
-          }
-          style={{ left: position?.arrowLeft ?? 32 }}
-        />
+        {position && (
+          <div
+            className={
+              position.placement === "top"
+                ? "absolute -bottom-[9px] h-0 w-0 -translate-x-1/2 border-x-[9px] border-t-[9px] border-x-transparent border-t-[#43425D]"
+                : "absolute -top-[9px] h-0 w-0 -translate-x-1/2 border-x-[9px] border-b-[9px] border-x-transparent border-b-[#43425D]"
+            }
+            style={{ left: position.arrowLeft ?? 32 }}
+          />
+        )}
 
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-2 top-2 text-slate-300 hover:text-slate-500"
+          className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center text-[#D6D6D6] transition hover:text-[#43425D]"
           aria-label="Close modal"
         >
-          <IoCloseCircleOutline size={18} />
+          <IoCloseCircleOutline size={20} />
         </button>
 
         {children}
       </div>
     </div>
   );
-}
+};
+
+export { Modal };
