@@ -24,3 +24,5 @@ export const calendarFormats = {
   weekdayFormat: (date: Date) => format(date, "EEE"),
   dayHeaderFormat: (date: Date) => format(date, "EEEE MMM d"),
 };
+
+export const calendarScrollStartTime = new Date(1970, 0, 1, 0, 0);

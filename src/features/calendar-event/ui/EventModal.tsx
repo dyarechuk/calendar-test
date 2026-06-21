@@ -13,12 +13,12 @@ type EventModalProps = {
   position?: ModalPosition;
   event?: CalendarEvent | null;
   onClose: () => void;
-  onCreate: (values: CalendarEventFormValues) => void;
-  onUpdate: (id: string, values: CalendarEventFormValues) => void;
-  onDelete: (id: string) => void;
+  onCreate: (values: CalendarEventFormValues) => boolean;
+  onUpdate: (id: string, values: CalendarEventFormValues) => boolean;
+  onDelete: (id: string) => boolean;
 };
 
-export function EventModal({
+const EventModal = ({
   mode,
   selectedDate,
   position,
@@ -27,7 +27,7 @@ export function EventModal({
   onCreate,
   onUpdate,
   onDelete,
-}: EventModalProps) {
+}: EventModalProps) => {
   const {
     values,
     errors,
@@ -50,7 +50,7 @@ export function EventModal({
 
   return (
     <Modal position={position} onClose={onClose}>
-      <div className="space-y-4 pt-2">
+      <div className="flex flex-col gap-5 pt-2">
         <Input
           label="event name"
           value={values.title}
@@ -88,7 +88,9 @@ export function EventModal({
 
         {!isReadonly && (
           <div>
-            <span className="mb-2 block text-[11px] text-slate-400">color</span>
+            <span className="mb-4 block text-[9px] leading-none text-[#D6D6D6]">
+              color
+            </span>
 
             <div className="flex gap-2">
               {EVENT_COLORS.map((color) => (
@@ -145,4 +147,6 @@ export function EventModal({
       </div>
     </Modal>
   );
-}
+};
+
+export { EventModal };

@@ -1,7 +1,7 @@
 import { MAX_EVENT_TITLE_LENGTH } from "./constants";
 import type { CalendarEventFormValues, FormErrors } from "./types";
 
-export function validateEventForm(values: CalendarEventFormValues): FormErrors {
+export const validateEventForm = (values: CalendarEventFormValues): FormErrors => {
   const errors: FormErrors = {};
 
   if (!values.title.trim()) {
@@ -25,14 +25,16 @@ export function validateEventForm(values: CalendarEventFormValues): FormErrors {
   if (values.date && values.time) {
     const selectedDate = new Date(`${values.date}T${values.time}`);
 
-    if (selectedDate < new Date()) {
+    if (Number.isNaN(selectedDate.getTime())) {
+      errors.date = "Invalid event date";
+    } else if (selectedDate < new Date()) {
       errors.date = "Past date is not allowed";
     }
   }
 
   return errors;
-}
+};
 
-export function hasErrors(errors: FormErrors) {
+export const hasErrors = (errors: FormErrors) => {
   return Object.keys(errors).length > 0;
-}
+};

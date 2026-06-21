@@ -1,3 +1,4 @@
+import { showAppToast } from "@/shared/lib/toast";
 import { useMemo, useState } from "react";
 import { EVENT_COLORS } from "./constants";
 import { toDateInputValue, toTimeInputValue } from "./date-format";
@@ -14,13 +15,13 @@ type UseEventModalParams = {
   mode: EventModalMode;
   selectedDate?: Date;
   event?: CalendarEvent | null;
-  onCreate: (values: CalendarEventFormValues) => void;
-  onUpdate: (id: string, values: CalendarEventFormValues) => void;
-  onDelete: (id: string) => void;
+  onCreate: (values: CalendarEventFormValues) => boolean;
+  onUpdate: (id: string, values: CalendarEventFormValues) => boolean;
+  onDelete: (id: string) => boolean;
   onClose: () => void;
 };
 
-export function useEventModal({
+export const useEventModal = ({
   mode,
   selectedDate,
   event,
@@ -28,7 +29,7 @@ export function useEventModal({
   onUpdate,
   onDelete,
   onClose,
-}: UseEventModalParams) {
+}: UseEventModalParams) => {
   const [currentMode, setCurrentMode] = useState<EventModalMode>(mode);
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -58,27 +59,42 @@ export function useEventModal({
   };
 
   const handleSave = () => {
-    const validationErrors = validateEventForm(values);
+    try {
+      const validationErrors = validateEventForm(values);
 
-    if (hasErrors(validationErrors)) {
-      setErrors(validationErrors);
-      return;
+      if (hasErrors(validationErrors)) {
+        setErrors(validationErrors);
+        return;
+      }
+
+      const isSaved = event ? onUpdate(event.id, values) : onCreate(values);
+
+      if (isSaved) {
+        onClose();
+      }
+    } catch {
+      showAppToast({
+        type: "error",
+        text: "Failed to save event",
+      });
     }
-
-    if (event) {
-      onUpdate(event.id, values);
-    } else {
-      onCreate(values);
-    }
-
-    onClose();
   };
 
   const handleDelete = () => {
     if (!event) return;
 
-    onDelete(event.id);
-    onClose();
+    try {
+      const isDeleted = onDelete(event.id);
+
+      if (isDeleted) {
+        onClose();
+      }
+    } catch {
+      showAppToast({
+        type: "error",
+        text: "Failed to delete event",
+      });
+    }
   };
 
   const enableEditMode = () => {
@@ -97,4 +113,4 @@ export function useEventModal({
     handleDelete,
     enableEditMode,
   };
-}
+};
